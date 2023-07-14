@@ -19,8 +19,6 @@
  */
 package com.peasenet.mods.movement
 
-import com.peasenet.mods.Mod
-import com.peasenet.mods.Type
 import com.peasenet.util.PlayerUtils
 
 /**
