@@ -19,7 +19,11 @@
  */
 package com.peasenet.mods.movement
 
+import com.peasenet.main.GavinsMod
+import com.peasenet.main.GavinsModClient
+import com.peasenet.mods.Type
 import com.peasenet.util.PlayerUtils
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
 
 /**
  * @author gt3ch1
@@ -32,6 +36,35 @@ class ModNoFall : MovementMod(
     "nofall"
 ) {
     override fun onTick() {
-        PlayerUtils.handleNoFall()
+        val player = GavinsModClient.player
+        if (player != null && isActive) {
+            if (player.getFallDistance() <= (if (isFalling) 1 else 2)) return
+            if (player.isSneaking() && !fallSpeedCanDamage && player.isFallFlying()) return
+            player.getNetworkHandler().sendPacket(PlayerMoveC2SPacket.OnGroundOnly(true))
+        }
     }
+
+    /**
+     *
+     * Whether the player is falling.
+     *
+     * @return True if the player is falling, false otherwise.
+     */
+    private val isFalling: Boolean
+        get() {
+            val player = GavinsModClient.player
+            return player!!.isFallFlying()
+        }
+
+    /**
+     * Whether the player can be damaged by the current fall speed.
+     *
+     * @return True if the player can be damaged, false otherwise.
+     */
+    private val fallSpeedCanDamage: Boolean
+        get() {
+            val player = GavinsModClient.player
+            return player!!.getVelocity().y < -0.5
+        }
+
 }

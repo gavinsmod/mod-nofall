@@ -14,7 +14,7 @@ public class NoFallMod implements ModInitializer {
      */
     @Override
     public void onInitialize() {
-        LOGGER.info("Hello Fabric world!");
+        LOGGER.info("Initializing GEM NoFall");
         GavinsMod.addMod(new ModNoFall());
     }
 }
